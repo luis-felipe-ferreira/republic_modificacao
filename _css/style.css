@@ -31,7 +31,7 @@ body {
 }
 
 .hero {
-    background: url('/_img/romulo-teixeira-reforma-ap-05.jpg') center/cover no-repeat;
+    background: url('/_img/background.jpg') center/cover no-repeat;
     height: 500px;
     display: flex;
     align-items: center;
