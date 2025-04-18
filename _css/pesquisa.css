@@ -1,3 +1,11 @@
+/* ===== pesquisa.css (/_css/pesquisa.css) ===== */
+
+/* Override para não herdar width/height fixos de .card do style.css */
+.cards .card {
+  width: auto;
+  height: auto;
+}
+
 .search-bar {
   margin: 20px;
   text-align: center;
@@ -26,6 +34,10 @@ main {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+
+.cards .card { /* você já sobrescreveu width/height, mas pode ajustar padding se quiser */
+  padding: 15px;
 }
 
 .card {
