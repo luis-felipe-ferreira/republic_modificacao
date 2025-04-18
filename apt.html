@@ -3,24 +3,19 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Republic – Detalhes do Imóvel</title>
-
-  <!-- CSS global -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Republic</title>
   <link rel="stylesheet" href="/_css/style.css">
-  <!-- CSS específico da página de apartamento -->
   <link rel="stylesheet" href="/_css/apt.css">
-  <!-- CSS do mapa -->
   <link rel="stylesheet" href="/_css/map.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 
 <body>
   <header class="header">
     <div class="logo">
-      <a href="index.html">
-        <img src="/_img/logo/logo_branca.png" alt="Republic Logo">
-      </a>
+      <a href="index.html"><img src="/_img/logo/logo_branca.png" alt="Republic Logo"></a>
     </div>
     <nav class="nav">
       <a href="/index.html">Home</a>
@@ -31,17 +26,16 @@
   </header>
 
   <main class="main-content">
-
-    <div class="image-gallery">
+    <div class="image-gallery side-by-side">
       <div class="main-img">
-        <img src="/_img/apts/1.jpg" alt="Imagem principal">
+        <img id="current-img" src="/_img/apts/1.jpg" alt="Imagem principal">
       </div>
       <div class="thumbs">
+        <img src="/_img/apts/1.jpg" alt="Imagem 1">
         <img src="/_img/apts/2.jpg" alt="Imagem 2">
         <img src="/_img/apts/3.jpg" alt="Imagem 3">
-        <img src="/_img/apts/4.jpg" alt="Imagem 4">
+        <img src="/_img/apts/2.webp" alt="Imagem 4">
         <img src="/_img/apts/5.jpg" alt="Imagem 5">
-        <button>mostrar todas</button>
       </div>
     </div>
 
@@ -53,6 +47,7 @@
         <li>3 camas</li>
         <li>4 hóspedes</li>
       </ul>
+
       <div class="highlights">
         <span>Estacionamento gratuito</span>
         <span>Ar-condicionado</span>
@@ -60,19 +55,18 @@
         <span>Wi-Fi rápido</span>
       </div>
 
-      <div class="description">
+      <section class="description">
         <h3>Descrição</h3>
-        <p>
-          Desfrute do conforto e da praticidade neste aconchegante imóvel localizado em um condomínio residencial seguro
+        <p>Desfrute do conforto e da praticidade neste aconchegante imóvel localizado em um condomínio residencial
+          seguro
           em Parnaíba, Piauí. Ideal para famílias, casais ou viajantes a negócios. O espaço conta com 2 quartos
           climatizados, cozinha completa, sala de estar com TV e Wi-Fi. Fácil acesso ao centro da cidade, praias e
           pontos
-          turísticos. Estacionamento gratuito incluído. Reserve agora e experimente o melhor de Parnaíba!
-        </p>
-      </div>
+          turísticos. Estacionamento gratuito incluído. Reserve agora e experimente o melhor de Parnaíba!</p>
+      </section>
 
       <div class="price-action">
-        <span class="price">R$ 200,00 / noite</span>
+        <span class="price">R$ 200,00 / noite</span>
         <button>Reservar estadia</button>
         <button>Enviar mensagem</button>
       </div>
@@ -89,10 +83,7 @@
       <div class="container text-center">
         <div class="row">
           <div class="col">
-            <p>
-              Avenida Monsenhor Antonio Sampaio, 2365 – Dirceu Arcoverde,
-              Parnaíba – PI, 64241‑145
-            </p>
+            <p>Avenida Monsenhor Antonio Sampaio, 2365 - Dirceu Arcoverde, Parnaíba - PI, 64241-145</p>
           </div>
           <div class="col">
             <div class="socials">
@@ -109,9 +100,8 @@
     </div>
   </footer>
 
-  <!-- scripts do mapa -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="/_js/map.js"></script>
+  <script src="/_js/gallery.js"></script>
 </body>
 
 </html>
