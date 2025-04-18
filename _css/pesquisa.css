@@ -1,10 +1,6 @@
 /* ===== pesquisa.css (/_css/pesquisa.css) ===== */
 
 /* Override para não herdar width/height fixos de .card do style.css */
-.cards .card {
-  width: auto;
-  height: auto;
-}
 
 .search-bar {
   margin: 20px;
@@ -46,16 +42,16 @@ main {
 }
 
 .cards .card {
-  /* você já sobrescreveu width/height, mas pode ajustar padding se quiser */
-  padding: 15px;
-}
-
-.card {
+  width: 350px;
+  height: 300px;
   background: white;
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 8px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card img {
@@ -63,7 +59,41 @@ main {
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
+  margin-top: 0;
 }
+
+.card-footer {
+  display: flex;
+  justify-content: space-between; /* Espaço entre o preço e o botão */
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  padding: 20px;
+}
+
+.preco {
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: left; /* Alinha o preço à esquerda */
+  flex: 1; /* Faz com que o preço ocupe o máximo de espaço disponível */
+}
+
+.botao {
+  text-align: right; /* Alinha o botão à direita */
+}
+
+.botao a {
+  background-color: black; /* Cor de fundo preta */
+  color: white;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.botao a:hover {
+  background-color: #333; /* Cor do fundo ao passar o mouse */
+}
+
 
 footer {
   background: black;
