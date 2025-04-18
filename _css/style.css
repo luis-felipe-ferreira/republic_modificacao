@@ -38,6 +38,7 @@ body {
     justify-content: center;
     position: relative;
     text-align: center;
+    
 }
 
 .btn-hero {
@@ -48,8 +49,14 @@ body {
     border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
-    margin-top: 40%;
+    text-decoration: none;
+
 }
+
+.hero-content{
+    margin-top: 15%;
+}
+
 
 .btn-hero:hover {
     background-color: rgb(255, 255, 255);
@@ -73,6 +80,30 @@ body {
     margin-top: 5%;
 }
 
+/* --------------- INICIO PÁGINA DE SOBRE ------------- */
+
+.bloco{
+    background-color: white;
+    margin: 50px;
+    border-radius: 20px;
+}
+
+
+.container{
+    padding: 30px 50px;
+}
+
+.container p{
+    text-align: justify;
+    line-height: 30px;
+    margin-top: 15px;
+}
+
+.container h2{
+    margin-bottom: 10px;
+
+}
+
 .team-members {
     display: flex;
     justify-content: space-around;
@@ -83,24 +114,29 @@ body {
 .member {
     text-align: center;
     max-width: 200px;
+    margin-top: 30px;
 }
 
-.img-funcionarios {
+.member img{
     width: 100%;
     max-width: 150px;
-    height: auto;
-    border-radius: 50%;
+    max-width: 150px;
+    border-radius: 20%;
     margin-bottom: 10px;
 }
 
+
 .member p {
     font-weight: bold;
+    text-align: center;
 }
 
 .member small {
     font-size: 0.9rem;
     color: #777;
 }
+
+/* --------------- FIM PÁGINA DE SOBRE ------------- */
 
 .features {
     margin-top: 5%;
