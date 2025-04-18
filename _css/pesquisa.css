@@ -36,7 +36,8 @@ main {
   gap: 20px;
 }
 
-.cards .card { /* você já sobrescreveu width/height, mas pode ajustar padding se quiser */
+.cards .card {
+  /* você já sobrescreveu width/height, mas pode ajustar padding se quiser */
   padding: 15px;
 }
 
