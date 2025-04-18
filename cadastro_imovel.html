@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Imóvel</title>
+    <link rel="stylesheet" href="/_css/cadastro_imovel.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html"><img src="/_img/logo/logo_preta.png" alt="Republic Logo"></a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>INFORMAÇÕES DO IMÓVEL</h1>
+        <form class="form-container">
+            <div class="form-left">
+                <label>Endereço</label>
+                <input type="text" name="endereco" />
+
+                <label>Bairro</label>
+                <input type="text" name="bairro" />
+
+                <label>Número</label>
+                <input type="text" name="numero" />
+
+                <label>CEP</label>
+                <input type="text" name="cep" placeholder="Ex: 64200-000" />
+
+                <label>Complemento</label>
+                <input type="text" name="complemento" />
+
+                <label>Adicionar fotos:</label>
+                <div class="upload-foto">
+                    <input type="file" name="fotos" id="foto-input" style="display:none" multiple>
+                    <label for="foto-input" class="btn-upload">+</label>
+                </div>
+
+                <label>Valor (mês)</label>
+                <div class="input-valor">
+                    <span class="prefixo">R$</span>
+                    <input type="text" name="valor" placeholder="0,00" />
+                </div>
+
+            </div>
+
+            <div class="form-right">
+                <div class="box">
+                    <label>Quantidade de quartos</label>
+                    <input type="number" name="quartos" min="0" placeholder="Ex: 3" />
+
+                    <label>Quantidade de banheiros</label>
+                    <input type="number" name="banheiros" min="0" placeholder="Ex: 2" />
+
+                    <label>Inclusos:</label>
+                    <label><input type="checkbox" name="inclusos" value="agua"> Água</label>
+                    <label><input type="checkbox" name="inclusos" value="luz"> Luz</label>
+                    <label><input type="checkbox" name="inclusos" value="internet"> Internet</label>
+                    <label><input type="checkbox" name="inclusos" value="mobília"> Mobiliado</label>
+                    <label><input type="checkbox" name="inclusos" value="gás"> Gás</label>
+                    <label><input type="checkbox" name="inclusos" value="garagem"> Garagem</label>
+
+                    <label for="outros">Outros:</label>
+                    <input type="text" id="outros" name="outros" placeholder="Ex: Piscina, Faxina..." />
+                </div>
+
+                <div class="descricao">
+                    <label><strong>Descrição do imóvel</strong></label>
+                    <textarea name="descricao"></textarea>
+                </div>
+            </div>
+        </form>
+
+        <div class="botoes">
+            <button type="submit">Confirmar</button>
+            <button type="button">Voltar</button>
+        </div>
+    </main>
+</body>
+
+</html>
