@@ -5,24 +5,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login | Republic</title>
-    <link rel="stylesheet" href="_css/style.css" />
-    <link rel="stylesheet" href="_css/cadastro.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
+
 </head>
 
 <body>
 
-    <!-- Header -->
+
     <header class="header">
         <div class="logo">
-            <a href="index.html"><img src="_img/logo/logo_branca.png" alt="Republic Logo"></a>
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
+            </a>
         </div>
         <nav class="nav">
-            <a href="index.html">Home</a>
-            <a href="sobre.html">Sobre</a>
-            <a href="pesquisa.html">Encontrar imóvel</a>
-            <a href="cadastro.html">Login</a>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('sobre') }}">Sobre</a>
+            <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
+
+            {% if usuario_nome %}
+            <div class="user-info">
+                <div class="separator">|</div>
+                <span class="saudacao">Olá, {{ usuario_nome }}!</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+            </div>
+            {% else %}
+            <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
+            {% endif %}
         </nav>
     </header>
+
 
 
 
@@ -38,11 +51,16 @@
                         <input type="password" name="senha" placeholder="Senha" required />
                         <button type="submit">Entrar</button>
                     </form>
+                    <div class="login">
+                        {% if mensagem_login %}
+                        <p style="color: red;">{{ mensagem_login }}</p>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <div class="auth-column cadastro-column">
                     <h2>Criar Conta</h2>
-                    <form class="auth-form" action="cadastro" method="post">
+                    <form class="auth-form" action="/cadastro" method="post">
                         <input type="text" name="nome" placeholder="Nome completo" required />
                         <input type="email" name="email" placeholder="E-mail" required />
                         <input type="password" name="senha" placeholder="Senha" required />
@@ -56,7 +74,17 @@
                             <button type="submit">Criar conta</button>
                         </div>
                     </form>
+                    <div class="cadastro">
+                        {% if mensagem %}
+                        {% if 'sucesso' in mensagem %}
+                        <p style="color: green;">{{ mensagem }}</p>
+                        {% else %}
+                        <p style="color: red;">{{ mensagem }}</p>
+                        {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
+
     </section>
 
 
@@ -70,13 +98,15 @@
                     </div>
                     <div class="col">
                         <div class="socials">
-                            <a href="#"><img src="_img/socials/facebook.png" alt="Facebook"></a>
-                            <a href="#"><img src="_img/socials/ig.png" alt="Instagram"></a>
-                            <a href="#"><img src="_img/socials/x.webp" alt="X"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/facebook.png') }}"
+                                    alt="Facebook"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/ig.png') }}"
+                                    alt="Instagram"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/x.webp') }}" alt="X"></a>
                         </div>
                     </div>
                     <div class="col">
-                        <a href="termos.html">Termos de serviço</a>
+                        <a href="{{ url_for('termos') }}">Termos de serviço</a>
                     </div>
                 </div>
             </div>

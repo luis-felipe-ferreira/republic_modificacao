@@ -4,21 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="_css/style.css">
-    <link rel="stylesheet" href="_css/termos.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/termos.css') }}">
     <title>Termos de Serviço - Republic</title>
 </head>
 
 <body>
     <header class="header">
         <div class="logo">
-            <a href="index.html"><img src="_img/logo/logo_branca.png" alt="Republic Logo"></a>
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
+            </a>
         </div>
         <nav class="nav">
-            <a href="index.html">Home</a>
-            <a href="sobre.html">Sobre</a>
-            <a href="pesquisa.html">Encontrar imóvel</a>
-            <a href="cadastro.html">Login</a>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('sobre') }}">Sobre</a>
+            <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
+
+            {% if usuario_nome %}
+            <div class="user-info">
+                <div class="separator">|</div>
+                <span class="saudacao">Olá, {{ usuario_nome }}!</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+            </div>
+            {% else %}
+            <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
+            {% endif %}
         </nav>
     </header>
 
@@ -122,13 +133,15 @@
                     </div>
                     <div class="col">
                         <div class="socials">
-                            <a href="#"><img src="_img/socials/facebook.png" alt="Facebook"></a>
-                            <a href="#"><img src="_img/socials/ig.png" alt="Instagram"></a>
-                            <a href="#"><img src="_img/socials/x.webp" alt="X"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/facebook.png') }}"
+                                    alt="Facebook"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/ig.png') }}"
+                                    alt="Instagram"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/x.webp') }}" alt="X"></a>
                         </div>
                     </div>
                     <div class="col">
-                        <a href="#">Termos de serviço</a>
+                        <a href="{{ url_for('termos') }}">Termos de serviço</a>
                     </div>
                 </div>
             </div>

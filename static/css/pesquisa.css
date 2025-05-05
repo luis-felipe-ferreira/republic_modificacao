@@ -26,13 +26,14 @@ main {
   border-radius: 20px;
 }
 
-.filters h3{
+.filters h3 {
   margin-top: 10px;
 }
 
-.filters h4{
+.filters h4 {
   margin-top: 20px;
 }
+
 .cards {
   width: 80%;
   padding: 20px;
@@ -64,7 +65,8 @@ main {
 
 .card-footer {
   display: flex;
-  justify-content: space-between; /* Espaço entre o preço e o botão */
+  justify-content: space-between;
+  /* Espaço entre o preço e o botão */
   align-items: center;
   margin-top: 20px;
   width: 100%;
@@ -74,16 +76,20 @@ main {
 .preco {
   font-weight: bold;
   font-size: 1.2em;
-  text-align: left; /* Alinha o preço à esquerda */
-  flex: 1; /* Faz com que o preço ocupe o máximo de espaço disponível */
+  text-align: left;
+  /* Alinha o preço à esquerda */
+  flex: 1;
+  /* Faz com que o preço ocupe o máximo de espaço disponível */
 }
 
 .botao {
-  text-align: right; /* Alinha o botão à direita */
+  text-align: right;
+  /* Alinha o botão à direita */
 }
 
 .botao a {
-  background-color: black; /* Cor de fundo preta */
+  background-color: black;
+  /* Cor de fundo preta */
   color: white;
   padding: 8px 15px;
   text-decoration: none;
@@ -91,7 +97,8 @@ main {
 }
 
 .botao a:hover {
-  background-color: #333; /* Cor do fundo ao passar o mouse */
+  background-color: #333;
+  /* Cor do fundo ao passar o mouse */
 }
 
 

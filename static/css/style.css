@@ -11,6 +11,44 @@ body {
     color: #333;
 }
 
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.separator {
+    color: white;
+    font-weight: bold;
+}
+
+.saudacao {
+    color: white;
+    border-bottom: 1px solid white;
+    padding-bottom: 2px;
+}
+
+.logout-btn {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: darkred;
+}
+
+
 .header {
     background: rgb(0, 0, 0);
     display: flex;
@@ -31,14 +69,14 @@ body {
 }
 
 .hero {
-    background: url('/_img/background.jpg') center/cover no-repeat;
+    background: url('/static/img/home/background.jpg') center/cover no-repeat;
     height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     text-align: center;
-    
+
 }
 
 .btn-hero {
@@ -53,7 +91,7 @@ body {
 
 }
 
-.hero-content{
+.hero-content {
     margin-top: 15%;
 }
 
@@ -82,24 +120,24 @@ body {
 
 /* --------------- INICIO PÁGINA DE SOBRE ------------- */
 
-.bloco{
+.bloco {
     background-color: white;
     margin: 50px;
     border-radius: 20px;
 }
 
 
-.container{
+.container {
     padding: 30px 50px;
 }
 
-.container p{
+.container p {
     text-align: justify;
     line-height: 30px;
     margin-top: 15px;
 }
 
-.container h2{
+.container h2 {
     margin-bottom: 10px;
 
 }
@@ -117,7 +155,7 @@ body {
     margin-top: 30px;
 }
 
-.member img{
+.member img {
     width: 100%;
     max-width: 150px;
     max-width: 150px;
