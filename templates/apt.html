@@ -41,16 +41,16 @@
       <div class="main-img">
         <!-- Exibe a imagem principal do apartamento -->
         {% if apartamento.imagens and apartamento.imagens|length > 0 %}
-        <img id="current-img" src="{{ url_for('static', filename='img/home/' + apartamento.imagens[0]) }}"
+        <img id="current-img" src="{{ url_for('static', filename='img/imoveis/' + apartamento.imagens[0]) }}"
           alt="Imagem principal">
         {% else %}
-        <img id="current-img" src="{{ url_for('static', filename='img/home/default.jpg') }}" alt="Imagem padrão">
+        <img id="current-img" src="{{ url_for('static', filename='img/imoveis/default.jpg') }}" alt="Imagem padrão">
         {% endif %}
       </div>
       <div class="thumbs">
         <!-- Exibe as miniaturas das imagens -->
         {% for img in apartamento.imagens %}
-        <img class="thumb" src="{{ url_for('static', filename='img/home/' + img) }}" alt="Imagem"
+        <img class="thumb" src="{{ url_for('static', filename='img/imoveis/' + img) }}" alt="Imagem"
           onclick="changeImage('{{ img }}')">
         {% endfor %}
       </div>
@@ -126,12 +126,6 @@
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   <script src="{{ url_for('static', filename='js/map.js') }}"></script>
   <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
-
-  <script>
-    function changeImage(image) {
-      document.getElementById('current-img').src = "{{ url_for('static', filename='img/home/') }}" + image;
-    }
-  </script>
 
 </body>
 

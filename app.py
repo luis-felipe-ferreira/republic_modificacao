@@ -95,7 +95,7 @@ def cadastro_imovel():
         for imagem in imagens:
             if imagem.filename != "":
                 filename = secure_filename(imagem.filename)
-                caminho = os.path.join('static/img/home', filename)
+                caminho = os.path.join('static/img/imoveis', filename)
                 imagem.save(caminho)
                 nomes_imagens.append(filename)
 

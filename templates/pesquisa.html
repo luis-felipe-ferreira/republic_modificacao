@@ -70,7 +70,8 @@
 
                 <div class="imagens-card">
                     {% set primeira_imagem = apt.imagens[0] if apt.imagens else 'default.jpg' %}
-                    <img src="{{ url_for('static', filename='img/home/' ~ primeira_imagem) }}" alt="Imagem do imóvel">
+                    <img src="{{ url_for('static', filename='img/imoveis/' ~ primeira_imagem) }}"
+                        alt="Imagem do imóvel">
                 </div>
 
 
