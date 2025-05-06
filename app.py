@@ -29,7 +29,8 @@ def inject_usuario_nome():
     if 'usuario_id' in session:
         conn = sqlite3.connect('instance/banco.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT nome, tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
+        cursor.execute(
+            'SELECT nome, tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
         resultado = cursor.fetchone()
         conn.close()
         if resultado:
@@ -41,18 +42,16 @@ def inject_usuario_nome():
 def index():
     tipo_usuario = None
     usuario_nome = None
-
     if 'usuario_id' in session:
         conn = sqlite3.connect('instance/banco.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT nome, tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
+        cursor.execute(
+            'SELECT nome, tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
         resultado = cursor.fetchone()
         if resultado:
             usuario_nome, tipo_usuario = resultado
         conn.close()
-
     return render_template('index.html', usuario_nome=usuario_nome, tipo_usuario=tipo_usuario)
-
 
 
 @app.route('/sobre')
@@ -102,10 +101,10 @@ def cadastro_imovel():
     if 'usuario_id' not in session:
         return redirect(url_for('login'))
 
-    # Verifica se o usuário é anunciante
     conn = sqlite3.connect('instance/banco.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
+    cursor.execute('SELECT tipo_usuario FROM usuarios WHERE id = ?',
+                   (session['usuario_id'],))
     resultado = cursor.fetchone()
     conn.close()
 
@@ -145,7 +144,8 @@ def cadastro_imovel():
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             endereco, bairro, numero, cep, complemento, valor, quartos, banheiros,
-            ",".join(inclusos), outros, descricao, ",".join(nomes_imagens), 'apartamento', session['usuario_id']
+            ",".join(inclusos), outros, descricao, ",".join(
+                nomes_imagens), 'apartamento', session['usuario_id']
         ))
 
         conn.commit()
@@ -230,7 +230,7 @@ def cadastro():
         email = request.form['email']
         senha = request.form['senha']
         celular = request.form['celular']
-        tipo_usuario = request.form['tipo_usuario']  # Captura o tipo de usuário selecionado
+        tipo_usuario = request.form['tipo_usuario']
 
         try:
             conn = sqlite3.connect('instance/banco.db')
@@ -244,7 +244,6 @@ def cadastro():
             mensagem_cadastro = 'Email já cadastrado.'
 
     return render_template('cadastro.html', mensagem_cadastro=mensagem_cadastro, mensagem_login=mensagem_login)
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -277,7 +276,7 @@ def logout():
     session.pop('usuario_id', None)
     return redirect(url_for('cadastro'))
 
-# Função para inicializar o banco com as tabelas
+# Função para inicializar o banco com verificação de colunas
 
 
 def inicializar_banco():
@@ -286,18 +285,25 @@ def inicializar_banco():
     conn = sqlite3.connect(banco_path)
     cursor = conn.cursor()
 
+    # Criação inicial da tabela de usuários (sem tipo_usuario)
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS usuarios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        senha TEXT NOT NULL,
-        celular TEXT,
-        tipo_usuario TEXT
-    )
-''')
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            senha TEXT NOT NULL,
+            celular TEXT
+        )
+    ''')
 
+    # Verifica e adiciona a coluna tipo_usuario se não existir
+    cursor.execute("PRAGMA table_info(usuarios);")
+    colunas = [col[1] for col in cursor.fetchall()]
+    if 'tipo_usuario' not in colunas:
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN tipo_usuario TEXT;")
+        print("Coluna 'tipo_usuario' adicionada à tabela 'usuarios'.")
 
+    # Criação da tabela de apartamentos
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS apartamentos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -321,10 +327,10 @@ def inicializar_banco():
 
     conn.commit()
     conn.close()
-    print("Banco de dados inicializado com sucesso!")
+    print("Banco de dados inicializado/verificado com sucesso!")
 
 
-# Chamada ao iniciar o app
+# Inicializa banco ao iniciar o app
 inicializar_banco()
 
 if __name__ == '__main__':
