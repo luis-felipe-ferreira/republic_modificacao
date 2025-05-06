@@ -24,12 +24,35 @@ def obter_usuario_nome():
 
 @app.context_processor
 def inject_usuario_nome():
-    return dict(usuario_nome=obter_usuario_nome())
+    usuario_nome = None
+    tipo_usuario = None
+    if 'usuario_id' in session:
+        conn = sqlite3.connect('instance/banco.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT nome, tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
+        resultado = cursor.fetchone()
+        conn.close()
+        if resultado:
+            usuario_nome, tipo_usuario = resultado
+    return dict(usuario_nome=usuario_nome, tipo_usuario=tipo_usuario)
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    tipo_usuario = None
+    usuario_nome = None
+
+    if 'usuario_id' in session:
+        conn = sqlite3.connect('instance/banco.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT nome, tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
+        resultado = cursor.fetchone()
+        if resultado:
+            usuario_nome, tipo_usuario = resultado
+        conn.close()
+
+    return render_template('index.html', usuario_nome=usuario_nome, tipo_usuario=tipo_usuario)
+
 
 
 @app.route('/sobre')
@@ -76,6 +99,19 @@ def termos():
 
 @app.route('/cadastro_imovel', methods=['GET', 'POST'])
 def cadastro_imovel():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    # Verifica se o usuário é anunciante
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT tipo_usuario FROM usuarios WHERE id = ?', (session['usuario_id'],))
+    resultado = cursor.fetchone()
+    conn.close()
+
+    if not resultado or resultado[0] != 'anunciante':
+        return "Apenas anunciantes podem acessar esta página.", 403
+
     if request.method == 'POST':
         endereco = request.form['endereco']
         bairro = request.form['bairro']
@@ -109,14 +145,14 @@ def cadastro_imovel():
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             endereco, bairro, numero, cep, complemento, valor, quartos, banheiros,
-            ",".join(inclusos), outros, descricao, ",".join(
-                nomes_imagens), 'apartamento', session['usuario_id']
+            ",".join(inclusos), outros, descricao, ",".join(nomes_imagens), 'apartamento', session['usuario_id']
         ))
 
         conn.commit()
         conn.close()
 
         return redirect(url_for('pesquisa'))
+
     return render_template('cadastro_imovel.html')
 
 
@@ -194,12 +230,13 @@ def cadastro():
         email = request.form['email']
         senha = request.form['senha']
         celular = request.form['celular']
+        tipo_usuario = request.form['tipo_usuario']  # Captura o tipo de usuário selecionado
 
         try:
             conn = sqlite3.connect('instance/banco.db')
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO usuarios (nome, email, senha, celular) VALUES (?, ?, ?, ?)',
-                           (nome, email, senha, celular))
+            cursor.execute('INSERT INTO usuarios (nome, email, senha, celular, tipo_usuario) VALUES (?, ?, ?, ?, ?)',
+                           (nome, email, senha, celular, tipo_usuario))
             conn.commit()
             conn.close()
             mensagem_cadastro = 'Cadastro realizado com sucesso!'
@@ -207,6 +244,7 @@ def cadastro():
             mensagem_cadastro = 'Email já cadastrado.'
 
     return render_template('cadastro.html', mensagem_cadastro=mensagem_cadastro, mensagem_login=mensagem_login)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -249,14 +287,16 @@ def inicializar_banco():
     cursor = conn.cursor()
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS usuarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            senha TEXT NOT NULL,
-            celular TEXT
-        )
-    ''')
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        senha TEXT NOT NULL,
+        celular TEXT,
+        tipo_usuario TEXT
+    )
+''')
+
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS apartamentos (
