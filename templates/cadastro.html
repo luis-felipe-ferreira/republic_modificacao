@@ -125,18 +125,8 @@
     </footer>
 
     <!-- Máscara do telefone -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const celularInput = document.querySelector('input[name="celular"]');
-            celularInput.addEventListener('input', function () {
-                let x = celularInput.value.replace(/\D/g, '').slice(0, 11);
-                if (x.length >= 2 && x.length <= 6)
-                    celularInput.value = `(${x.slice(0, 2)}) ${x.slice(2)}`;
-                else if (x.length > 6)
-                    celularInput.value = `(${x.slice(0, 2)}) ${x.slice(2, 7)}-${x.slice(7)}`;
-            });
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/tel.js') }}"></script>
+
 </body>
 
 </html>
