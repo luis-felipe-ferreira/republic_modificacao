@@ -27,6 +27,11 @@
       {% if tipo_usuario == 'anunciante' %}
           <a href="{{ url_for('cadastro_imovel') }}">Anunciar</a>
       {% endif %}
+
+      {% if tipo_usuario == 'anunciante' %}
+      <a href="{{ url_for('meus_apartamentos') }}">Meus anúncios</a>
+      {% endif %}
+
   
       {% if usuario_nome %}
           <div class="user-info">

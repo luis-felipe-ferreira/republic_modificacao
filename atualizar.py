@@ -2,14 +2,17 @@
 
 import sqlite3
 
-# Conectar ao banco de dados
+# Conecta ao banco
 conn = sqlite3.connect('instance/banco.db')
 cursor = conn.cursor()
 
-# Adicionar a coluna 'tipo_usuario' à tabela 'usuarios'
-cursor.execute('ALTER TABLE usuarios ADD COLUMN tipo_usuario TEXT')
+# Tenta adicionar a coluna "ativo"
+try:
+    cursor.execute("ALTER TABLE apartamentos ADD COLUMN ativo INTEGER DEFAULT 1;")
+    print("Coluna 'ativo' adicionada com sucesso.")
+except sqlite3.OperationalError as e:
+    print("Erro:", e)
 
+# Salva e fecha
 conn.commit()
 conn.close()
-
-print("Coluna 'tipo_usuario' adicionada com sucesso!")

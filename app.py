@@ -63,8 +63,11 @@ def sobre():
 def pesquisa():
     conn = sqlite3.connect('instance/banco.db')
     cursor = conn.cursor()
-    cursor.execute(
-        "SELECT id, tipo, quartos, valor, endereco, inclusos, imagem FROM apartamentos")
+    cursor.execute("""
+        SELECT id, tipo, quartos, valor, endereco, inclusos, imagem 
+        FROM apartamentos 
+        WHERE ativo = 1
+    """)
     rows = cursor.fetchall()
     conn.close()
 
@@ -156,6 +159,68 @@ def cadastro_imovel():
     return render_template('cadastro_imovel.html')
 
 
+@app.route('/meus_apartamentos')
+def meus_apartamentos():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    usuario_id = session['usuario_id']
+
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT id, endereco, bairro, valor, tipo, imagem, ativo
+    FROM apartamentos
+    WHERE usuario_id = ?
+    """, (usuario_id,))
+
+    apartamentos = cursor.fetchall()
+    conn.close()
+
+    return render_template('meus_apartamentos.html', apartamentos=apartamentos)
+
+@app.route('/editar_apartamento/<int:id>', methods=['GET', 'POST'])
+def editar_apartamento(id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        novo_valor = request.form['valor']
+        nova_descricao = request.form['descricao']
+        cursor.execute("""
+            UPDATE apartamentos
+            SET valor = ?, descricao = ?
+            WHERE id = ? AND usuario_id = ?
+        """, (novo_valor, nova_descricao, id, session['usuario_id']))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('meus_apartamentos'))
+
+    cursor.execute("SELECT valor, descricao FROM apartamentos WHERE id = ? AND usuario_id = ?", (id, session['usuario_id']))
+    apt = cursor.fetchone()
+    conn.close()
+
+    if not apt:
+        return "Apartamento não encontrado ou não autorizado", 404
+
+    return render_template('editar_apartamento.html', id=id, valor=apt[0], descricao=apt[1])
+
+@app.route('/excluir_apartamento/<int:id>', methods=['POST'])
+def excluir_apartamento(id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM apartamentos WHERE id = ? AND usuario_id = ?", (id, session['usuario_id']))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('meus_apartamentos'))
+
+
 @app.route('/detalhes_apartamento/<int:id>')
 def detalhes_apartamento(id):
     conn = sqlite3.connect('instance/banco.db')
@@ -203,21 +268,24 @@ def detalhes_apartamento(id):
 def parar_anuncio(id):
     if 'usuario_id' not in session:
         return redirect(url_for('login'))
-
     conn = sqlite3.connect('instance/banco.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT usuario_id FROM apartamentos WHERE id = ?", (id,))
-    apt = cursor.fetchone()
-
-    if not apt or apt[0] != session['usuario_id']:
-        conn.close()
-        return "Acesso negado", 403
-
-    cursor.execute("DELETE FROM apartamentos WHERE id = ?", (id,))
+    cursor.execute("UPDATE apartamentos SET ativo = 0 WHERE id = ? AND usuario_id = ?", (id, session['usuario_id']))
     conn.commit()
     conn.close()
+    return redirect(url_for('meus_apartamentos'))
 
-    return redirect(url_for('pesquisa'))
+@app.route('/ativar_anuncio/<int:id>', methods=['POST'])
+def ativar_anuncio(id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE apartamentos SET ativo = 1 WHERE id = ? AND usuario_id = ?", (id, session['usuario_id']))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('meus_apartamentos'))
+
 
 
 @app.route('/cadastro', methods=['GET', 'POST'])
