@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Imóvel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_imovel.css') }}">
+    
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
+            </a>
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('sobre') }}">Sobre</a>
+            <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
+
+            {% if tipo_usuario == 'anunciante' %}
+            <a href="{{ url_for('cadastro_imovel') }}">Anunciar</a>
+            {% endif %}
+
+            {% if tipo_usuario == 'anunciante' %}
+            <a href="{{ url_for('meus_imoveis') }}">Meus anúncios</a>
+            {% endif %}
+
+            {% if usuario_nome %}
+            <div class="user-info">
+                <div class="separator">|</div>
+                <span class="saudacao">Olá, {{ usuario_nome }}!</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+            </div>
+            {% else %}
+            <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="container_imovel">
+        <h1>EDITAR INFORMAÇÕES DO IMÓVEL</h1>
+        <form class="form-container" id="editarImovelForm">
+            <input type="hidden" id="imovelId" name="imovelId">
+            <div class="form-left">
+                <label for="tipo">Tipo do imóvel</label>
+                <select name="tipo" id="tipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="casa">Casa</option>
+                    <option value="apartamento">Apartamento</option>
+                    <option value="kitnet">Kitnet</option>
+                </select>
+
+                <label>Endereço</label>
+                <input type="text" name="endereco" id="endereco" required />
+
+                <label>Bairro</label>
+                <input type="text" name="bairro" id="bairro" required />
+
+                <label>Número</label>
+                <input type="text" name="numero" id="numero" required />
+
+                <label>CEP</label>
+                <input type="text" name="cep" id="cep" placeholder="Ex: 64200-000" required />
+
+                <label>Complemento</label>
+                <input type="text" name="complemento" id="complemento" placeholder="Ex: Próximo à tal lugar" required />
+
+                <label>Adicionar fotos:</label>
+                <div class="upload-foto">
+                    <input type="file" name="fotos" id="foto-input" style="display:none" multiple
+                        onchange="previewImages(event)">
+                    <label for="foto-input" class="btn-upload">+</label>
+                </div>
+
+                <div id="image-preview-container"></div>
+                <div id="existing-images-container"></div>
+
+                <label>Valor (mês)</label>
+                <div class="input-valor">
+                    <span class="prefixo">R$</span>
+                    <input type="text" name="valor" id="valor" placeholder="0,00" required />
+                </div>
+            </div>
+
+            <div class="form-right">
+                <div class="box">
+                    <label>Quantidade de quartos</label>
+                    <input type="number" name="quartos" id="quartos" min="0" placeholder="Ex: 3" required />
+
+                    <label>Quantidade de banheiros</label>
+                    <input type="number" name="banheiros" id="banheiros" min="0" placeholder="Ex: 2" required />
+
+                    <label>Inclusos:</label>
+                    <label><input type="checkbox" name="inclusos" value="Água" id="agua"> Água</label>
+                    <label><input type="checkbox" name="inclusos" value="Luz" id="luz"> Luz</label>
+                    <label><input type="checkbox" name="inclusos" value="Internet" id="internet"> Internet</label>
+                    <label><input type="checkbox" name="inclusos" value="Mobiliado" id="mobiliado"> Mobiliado</label>
+                    <label><input type="checkbox" name="inclusos" value="Gás" id="gas"> Gás</label>
+                    <label><input type="checkbox" name="inclusos" value="Garagem" id="garagem"> Garagem</label>
+
+                    <label for="outros">Outros:</label>
+                    <input type="text" id="outros" name="outros" placeholder="Ex: Piscina, Faxina..." />
+                </div>
+
+                <div class="descricao">
+                    <label><strong>Descrição do imóvel</strong></label>
+                    <textarea name="descricao" id="descricao" required></textarea>
+                </div>
+            </div>
+
+            <!-- Botão de envio do formulário -->
+            <button type="submit">Confirmar Edição</button>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col">
+                        <p>Avenida Monsenhor Antonio Sampaio, 2365 - Dirceu Arcoverde, Parnaíba - PI, 64241-145</p>
+                    </div>
+                    <div class="col">
+                        <div class="socials">
+                            <a href="#"><img src="{{ url_for('static', filename='facebook.png') }}" alt="Facebook"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='ig.png') }}" alt="Instagram"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='x.webp') }}" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <a href="termos.html">Termos de serviço</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Função para pré-visualizar imagens selecionadas
+        function previewImages(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('image-preview-container');
+
+            // Limpar pré-visualização anterior
+            previewContainer.innerHTML = '';
+
+            // Verifica se o número de arquivos excede 5
+            if (files.length > 5) {
+                alert('Você pode adicionar até 5 imagens.');
+                return;
+            }
+
+            // Iterar sobre os arquivos e mostrar as imagens
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.classList.add('preview-img');
+                    previewContainer.appendChild(imgElement);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Função para obter parâmetros da URL
+        function getUrlParams() {
+    const pathParts = window.location.pathname.split('/');
+    return {
+        id: pathParts[pathParts.length - 1]
+    };
+}
+
+        // Função para carregar os dados do imóvel para edição
+        async function carregarDadosImovel() {
+            const { id } = getUrlParams();
+            if (!id) {
+                alert('ID do imóvel não fornecido');
+                window.location.href = 'meus_imoveis.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/imovel/${id}`);
+                if (!response.ok) {
+                    throw new Error('Falha ao carregar dados do imóvel');
+                }
+                
+                const imovel = await response.json();
+                
+                // Preencher o formulário com os dados existentes
+                document.getElementById('imovelId').value = imovel.id;
+                document.getElementById('tipo').value = imovel.tipo;
+                document.getElementById('endereco').value = imovel.endereco;
+                document.getElementById('bairro').value = imovel.bairro;
+                document.getElementById('numero').value = imovel.numero;
+                document.getElementById('cep').value = imovel.cep;
+                document.getElementById('complemento').value = imovel.complemento;
+                document.getElementById('valor').value = imovel.valor;
+                document.getElementById('quartos').value = imovel.quartos;
+                document.getElementById('banheiros').value = imovel.banheiros;
+                document.getElementById('outros').value = imovel.outros || '';
+                document.getElementById('descricao').value = imovel.descricao;
+                
+                // Marcar checkboxes de inclusos
+                if (imovel.inclusos) {
+                    if (Array.isArray(imovel.inclusos)) {
+                        imovel.inclusos.forEach(item => {
+                            const checkbox = document.querySelector(`input[name="inclusos"][value="${item}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    } else if (typeof imovel.inclusos === 'string') {
+                        const inclusos = imovel.inclusos.split(',').map(item => item.trim());
+                        inclusos.forEach(item => {
+                            const checkbox = document.querySelector(`input[name="inclusos"][value="${item}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    }
+                }
+                
+                // Exibir imagens existentes
+                if (imovel.fotos && imovel.fotos.length > 0) {
+                    const container = document.getElementById('existing-images-container');
+                    container.innerHTML = '<h3>Imagens atuais:</h3>';
+                    
+                    imovel.fotos.forEach((foto, index) => {
+                        const imgWrapper = document.createElement('div');
+                        imgWrapper.className = 'existing-img-wrapper';
+                        
+                        const img = document.createElement('img');
+                        img.src = foto;
+                        img.className = 'existing-img';
+                        img.alt = `Imagem ${index + 1}`;
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.type = 'button';
+                        deleteBtn.className = 'delete-img-btn';
+                        deleteBtn.textContent = 'X';
+                        deleteBtn.dataset.index = index;
+                        deleteBtn.onclick = function() {
+                            if (confirm('Deseja remover esta imagem?')) {
+                                imgWrapper.remove();
+                                // Aqui você pode adicionar lógica para marcar a imagem para exclusão
+                            }
+                        };
+                        
+                        imgWrapper.appendChild(img);
+                        imgWrapper.appendChild(deleteBtn);
+                        container.appendChild(imgWrapper);
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar dados do imóvel. Por favor, tente novamente.');
+            }
+        }
+
+        // Função para enviar o formulário via PUT
+        async function enviarFormulario(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('editarImovelForm');
+            const formData = new FormData(form);
+            const imovelId = document.getElementById('imovelId').value;
+            
+            // Coletar os valores dos checkboxes marcados
+            const inclusos = [];
+            document.querySelectorAll('input[name="inclusos"]:checked').forEach(checkbox => {
+                inclusos.push(checkbox.value);
+            });
+            
+            // Criar objeto com os dados do formulário
+            const dadosImovel = {
+                tipo: formData.get('tipo'),
+                endereco: formData.get('endereco'),
+                bairro: formData.get('bairro'),
+                numero: formData.get('numero'),
+                cep: formData.get('cep'),
+                complemento: formData.get('complemento'),
+                valor: formData.get('valor'),
+                quartos: formData.get('quartos'),
+                banheiros: formData.get('banheiros'),
+                inclusos: inclusos,
+                outros: formData.get('outros'),
+                descricao: formData.get('descricao')
+            };
+            
+            try {
+                // Para enviar arquivos junto com JSON, precisamos usar FormData
+                const formDataCompleto = new FormData();
+                
+                // Adicionar os dados JSON
+                formDataCompleto.append('dados', JSON.stringify(dadosImovel));
+                
+                // Adicionar as fotos
+                const fileInput = document.getElementById('foto-input');
+                if (fileInput.files.length > 0) {
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        formDataCompleto.append('novas_fotos', fileInput.files[i]);
+                    }
+                }
+                
+                // Enviar requisição PUT
+                const response = await fetch(`/api/imoveis/${imovelId}`, {
+                    method: 'PUT',
+                    body: formDataCompleto
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Falha ao atualizar imóvel');
+                }
+                
+                alert('Imóvel atualizado com sucesso!');
+                window.location.href = "{{ url_for('meus_imoveis') }}";
+                
+            } catch (error) {
+                console.error('Erro ao enviar dados:', error);
+                alert('Erro ao atualizar imóvel. Por favor, tente novamente.');
+            }
+        }
+
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarDadosImovel();
+            document.getElementById('editarImovelForm').addEventListener('submit', enviarFormulario);
+        });
+    </script>
+</body>
+
+</html>
